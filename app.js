@@ -28,7 +28,7 @@ app.use(passport.initialize())
 app.use(passport.session())
 
 app.use('/api/user', authRoute);
-app.use('/api/pvtspace', homeRoute);
+app.use('/api/homepage', homeRoute);
 
 mongoose.connect(process.env.DB_CONNECT, {useUnifiedTopology: true, useNewUrlParser: true}).then(()=>{
 
