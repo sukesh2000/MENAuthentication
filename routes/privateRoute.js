@@ -1,15 +1,20 @@
 const router = require('express').Router();
-const verify = require('./verifyToken')
 
-router.get('/pvt', verify, (req, res)=>{
-    const {iat,exp} = req.user
-    req.user.exp = new Date(exp*1000).toLocaleString();
-    req.user.iat = new Date(iat*1000).toLocaleString();
+let checkAuthenticated = (req, res, next) => {
+    if(req.isAuthenticated()){
+        return next();
+    }
+    res.status(401).send("Unauthenticated");
+}
+
+router.get('/pvt', checkAuthenticated, (req, res)=>{
+    const expires = new Date(req.session.cookie._expires).toLocaleString();
     res.json({
         posts: {
             title: "Private Route",
             description: "Only authorized users are allowed",
-            user: req.user
+            user: req.user,
+            expireTime: expires
         }
     })
 })

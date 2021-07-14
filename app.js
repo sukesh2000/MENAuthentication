@@ -1,16 +1,31 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const app = express();
-const port = process.env.PORT || 5000;
 const dotenv = require('dotenv')
+const passport = require('passport');
+const flash = require('express-flash')
+const session = require('express-session')
+const port = process.env.PORT || 5000;
 
 dotenv.config()
 
 const authRoute = require('./routes/auth');
 const pvtRoute = require('./routes/privateRoute'); 
 
+const initializePassport = require('./config/passport-config');
+initializePassport(passport)
+
 app.use(express.urlencoded({extended:true}));
 app.use(express.json());
+app.use(flash())
+app.use(session({
+    secret: process.env.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: false,
+    cookie: {httpOnly: true,  maxAge: 10800000},
+}))
+app.use(passport.initialize())
+app.use(passport.session())
 
 app.use('/api/user', authRoute);
 app.use('/api/pvtspace', pvtRoute);
