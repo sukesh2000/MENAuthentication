@@ -10,7 +10,7 @@ const port = process.env.PORT || 5000;
 dotenv.config()
 
 const authRoute = require('./routes/auth');
-const pvtRoute = require('./routes/privateRoute'); 
+const homeRoute = require('./routes/homeRoute'); 
 
 const initializePassport = require('./config/passport-config');
 initializePassport(passport)
@@ -28,7 +28,7 @@ app.use(passport.initialize())
 app.use(passport.session())
 
 app.use('/api/user', authRoute);
-app.use('/api/pvtspace', pvtRoute);
+app.use('/api/pvtspace', homeRoute);
 
 mongoose.connect(process.env.DB_CONNECT, {useUnifiedTopology: true, useNewUrlParser: true}).then(()=>{
 
